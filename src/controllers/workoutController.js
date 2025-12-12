@@ -47,14 +47,6 @@ export const createWorkout = async (req, res) => {
   try {
     const { name, date, duration, type } = req.body;
 
-    // Validation
-    if (!name || !date || !duration || !type) {
-      return res.status(400).json({
-        success: false,
-        message: 'Please provide all required fields: name, date, duration, type'
-      });
-    }
-
     const newWorkout = await Workout.create({ name, date, duration, type });
 
     res.status(201).json({
@@ -75,14 +67,6 @@ export const createWorkout = async (req, res) => {
 export const updateWorkout = async (req, res) => {
   try {
     const { name, date, duration, type } = req.body;
-
-    // Validation
-    if (!name || !date || !duration || !type) {
-      return res.status(400).json({
-        success: false,
-        message: 'Please provide all required fields: name, date, duration, type'
-      });
-    }
 
     const updated = await Workout.update(req.params.id, { name, date, duration, type });
 
