@@ -16,20 +16,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Serve static files (HTML documentation)
+app.use(express.static('public'));
+
 // Test database connection on startup
 testConnection();
-
-// Routes
-app.get('/', (req, res) => {
-  res.json({
-    message: 'Workout Tracker API',
-    version: '1.0.0',
-    endpoints: {
-      workouts: '/api/workouts',
-      exercises: '/api/exercises'
-    }
-  });
-});
 
 // API Routes
 app.use('/api/workouts', workoutRoutes);
@@ -56,6 +47,7 @@ app.use((err, req, res, next) => {
 // Start server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+  console.log(`API Documentation: http://localhost:${PORT}`);
   console.log(`API Workouts: http://localhost:${PORT}/api/workouts`);
   console.log(`API Exercises: http://localhost:${PORT}/api/exercises`);
 });
