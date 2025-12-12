@@ -2,29 +2,6 @@
 
 Een RESTful API voor het beheren van workouts en oefeningen, gebouwd met Node.js, Express en MySQL.
 
----
-
-## Quick Start
-
-1. **Installeer dependencies:**
-   ```bash
-   npm install
-   ```
-
-2. **Configureer database** (zie [Database Setup](#database-setup))
-
-3. **Start de server:**
-   ```bash
-   npm run dev
-   ```
-
-4. **Open de applicatie:**
-   - **Main App (Documentatie):** [http://localhost:3000](http://localhost:3000)
-   - **Workouts API:** [http://localhost:3000/api/workouts](http://localhost:3000/api/workouts)
-   - **Exercises API:** [http://localhost:3000/api/exercises](http://localhost:3000/api/exercises)
-
----
-
 ## Inhoudsopgave
 
 - [Overzicht](#overzicht)
@@ -42,19 +19,17 @@ Een RESTful API voor het beheren van workouts en oefeningen, gebouwd met Node.js
 
 Deze API stelt gebruikers in staat om workouts en oefeningen te beheren. Je kunt nieuwe workouts toevoegen, bestaande workouts bijwerken, oefeningen aan workouts koppelen, zoeken en pagineren door resultaten.
 
-**Main App:** De applicatie bevat een professionele HTML documentatie pagina die automatisch wordt getoond op `http://localhost:3000`
-
 ## Features
 
-- CRUD operaties voor workouts en exercises
-- Validatie middleware voor input validatie
-- Paginatie voor grote datasets
-- Zoekfunctionaliteit voor workouts en exercises
-- Relaties tussen workouts en exercises (ONE-TO-MANY)
-- Error handling met duidelijke foutmeldingen
-- HTML API documentatie op root endpoint
-- CORS support
-- Environment variables voor configuratie
+- ✅ **CRUD operaties** voor workouts en exercises
+- ✅ **Validatie middleware** voor input validatie
+- ✅ **Paginatie** voor grote datasets
+- ✅ **Zoekfunctionaliteit** voor workouts en exercises
+- ✅ **Relaties** tussen workouts en exercises (ONE-TO-MANY)
+- ✅ **Error handling** met duidelijke foutmeldingen
+- ✅ **HTML API documentatie** op root endpoint
+- ✅ **CORS** support
+- ✅ **Environment variables** voor configuratie
 
 ## Tech Stack
 
@@ -147,17 +122,9 @@ npm start
 
 De server draait standaard op `http://localhost:3000`
 
-### Toegang tot de Applicatie
+### API Documentatie
 
-Na het starten van de server:
-
-| Beschrijving | URL | Wat zie je? |
-|--------------|-----|-------------|
-| **Main App (HTML Docs)** | `http://localhost:3000` | Interactieve API documentatie |
-| **Workouts API** | `http://localhost:3000/api/workouts` | JSON lijst van alle workouts |
-| **Exercises API** | `http://localhost:3000/api/exercises` | JSON lijst van alle exercises |
-| **Specific Workout** | `http://localhost:3000/api/workouts/1` | JSON van workout met ID 1 |
-| **Search Workouts** | `http://localhost:3000/api/workouts/search?name=cardio` | JSON zoekresultaten |
+Bezoek `http://localhost:3000` in je browser voor de volledige HTML API documentatie.
 
 ## API Endpoints
 
@@ -255,7 +222,7 @@ Project2/
 │   └── schema.sql              # Database schema en sample data
 │
 ├── public/
-│   └── index.html              # HTML API documentatie (MAIN APP)
+│   └── index.html              # HTML API documentatie
 │
 ├── src/
 │   ├── config/
@@ -352,7 +319,6 @@ Test de API met tools zoals:
 - **Postman** - Import de endpoints en test alle routes
 - **Thunder Client** (VS Code extension)
 - **cURL** - Command line testing
-- **Browser** - Ga naar `http://localhost:3000` voor de HTML documentatie
 
 ### cURL Voorbeelden
 
@@ -376,13 +342,6 @@ curl "http://localhost:3000/api/workouts/search?name=cardio"
 # Paginatie
 curl "http://localhost:3000/api/workouts?limit=5&offset=0"
 ```
-
-### Browser Test
-
-1. Start de server: `npm run dev`
-2. Open browser
-3. Ga naar `http://localhost:3000`
-4. Je ziet nu de volledige API documentatie met voorbeelden
 
 ## Bronvermelding
 
