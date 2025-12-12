@@ -7,7 +7,6 @@ import {
   updateExercise,
   deleteExercise
 } from '../controllers/exerciseController.js';
-import { validateExercise, validateId } from '../middleware/validation.js';
 
 const router = express.Router();
 
@@ -15,18 +14,18 @@ const router = express.Router();
 router.get('/', getAllExercises);
 
 // GET exercises by workout ID
-router.get('/workout/:workoutId', validateId, getExercisesByWorkout);
+router.get('/workout/:workoutId', getExercisesByWorkout);
 
 // GET exercise by ID
-router.get('/:id', validateId, getExerciseById);
+router.get('/:id', getExerciseById);
 
 // POST new exercise
-router.post('/', validateExercise, createExercise);
+router.post('/', createExercise);
 
 // PUT update exercise
-router.put('/:id', validateId, validateExercise, updateExercise);
+router.put('/:id', updateExercise);
 
 // DELETE exercise
-router.delete('/:id', validateId, deleteExercise);
+router.delete('/:id', deleteExercise);
 
 export default router;

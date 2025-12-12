@@ -64,6 +64,14 @@ export const createExercise = async (req, res) => {
   try {
     const { workout_id, name, muscle_group, sets, reps, weight } = req.body;
 
+    // Validation
+    if (!workout_id || !name || !muscle_group || !sets || !reps) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide all required fields: workout_id, name, muscle_group, sets, reps'
+      });
+    }
+
     const newExercise = await Exercise.create({
       workout_id,
       name,
@@ -91,6 +99,14 @@ export const createExercise = async (req, res) => {
 export const updateExercise = async (req, res) => {
   try {
     const { workout_id, name, muscle_group, sets, reps, weight } = req.body;
+
+    // Validation
+    if (!workout_id || !name || !muscle_group || !sets || !reps) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide all required fields: workout_id, name, muscle_group, sets, reps'
+      });
+    }
 
     const updated = await Exercise.update(req.params.id, {
       workout_id,
