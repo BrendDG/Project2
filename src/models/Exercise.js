@@ -1,7 +1,7 @@
 import db from '../config/database.js';
 
 class Exercise {
-  // Get all exercises
+  // Haal alle exercises op
   static async getAll() {
     try {
       const [rows] = await db.query(
@@ -16,7 +16,7 @@ class Exercise {
     }
   }
 
-  // Get all exercises with pagination
+  // Haal alle exercises op met paginatie
   static async getAllPaginated(limit = 10, offset = 0) {
     try {
       const [rows] = await db.query(
@@ -28,7 +28,7 @@ class Exercise {
         [parseInt(limit), parseInt(offset)]
       );
 
-      // Get total count for pagination info
+      // Haal totaal aantal op voor paginatie informatie
       const [countResult] = await db.query('SELECT COUNT(*) as total FROM exercises');
       const total = countResult[0].total;
 
@@ -46,7 +46,7 @@ class Exercise {
     }
   }
 
-  // Search exercises by name or muscle group
+  // Zoek exercises op naam of spiergroep
   static async search(searchTerm) {
     try {
       const [rows] = await db.query(
@@ -63,7 +63,7 @@ class Exercise {
     }
   }
 
-  // Get exercises by workout ID
+  // Haal exercises op via workout ID
   static async getByWorkoutId(workoutId) {
     try {
       const [rows] = await db.query(
@@ -76,7 +76,7 @@ class Exercise {
     }
   }
 
-  // Get exercise by ID
+  // Haal exercise op via ID
   static async getById(id) {
     try {
       const [rows] = await db.query(
@@ -92,7 +92,7 @@ class Exercise {
     }
   }
 
-  // Create new exercise
+  // Maak nieuwe exercise aan
   static async create(data) {
     try {
       const { workout_id, name, muscle_group, sets, reps, weight } = data;
@@ -120,7 +120,7 @@ class Exercise {
     }
   }
 
-  // Delete exercise
+  // Verwijder exercise
   static async delete(id) {
     try {
       const [result] = await db.query('DELETE FROM exercises WHERE id = ?', [id]);

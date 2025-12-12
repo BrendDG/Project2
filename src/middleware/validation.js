@@ -1,4 +1,4 @@
-// Validation helper functions
+// Validatie helper functies
 const isEmpty = (value) => {
   return value === undefined || value === null || value === '';
 };
@@ -25,12 +25,12 @@ const isPositiveNumber = (value) => {
   return isNumber(value) && value > 0;
 };
 
-// Workout validation rules
+// Workout validatie regels
 export const validateWorkout = (req, res, next) => {
   const errors = [];
   const { name, date, duration, type } = req.body;
 
-  // Check for empty fields
+  // Controleer op lege velden
   if (isEmpty(name)) {
     errors.push('Name is required');
   } else if (!isString(name)) {
@@ -64,7 +64,7 @@ export const validateWorkout = (req, res, next) => {
     }
   }
 
-  // If there are validation errors, return them
+  // Als er validatie fouten zijn, stuur ze terug
   if (errors.length > 0) {
     return res.status(400).json({
       success: false,
@@ -73,16 +73,16 @@ export const validateWorkout = (req, res, next) => {
     });
   }
 
-  // Validation passed, continue to next middleware
+  // Validatie geslaagd, ga door naar volgende middleware
   next();
 };
 
-// Exercise validation rules
+// Exercise validatie regels
 export const validateExercise = (req, res, next) => {
   const errors = [];
   const { workout_id, name, muscle_group, sets, reps, weight } = req.body;
 
-  // Check for empty fields
+  // Controleer op lege velden
   if (isEmpty(workout_id)) {
     errors.push('Workout ID is required');
   } else if (!isNumber(workout_id)) {
@@ -126,7 +126,7 @@ export const validateExercise = (req, res, next) => {
     errors.push('Reps must be a positive number');
   }
 
-  // Weight is optional, but if provided, validate it
+  // Weight is optioneel, maar als opgegeven, valideer het
   if (!isEmpty(weight)) {
     if (!isNumber(weight)) {
       errors.push('Weight must be a number');
@@ -135,7 +135,7 @@ export const validateExercise = (req, res, next) => {
     }
   }
 
-  // If there are validation errors, return them
+  // Als er validatie fouten zijn, stuur ze terug
   if (errors.length > 0) {
     return res.status(400).json({
       success: false,
@@ -144,11 +144,11 @@ export const validateExercise = (req, res, next) => {
     });
   }
 
-  // Validation passed, continue to next middleware
+  // Validatie geslaagd, ga door naar volgende middleware
   next();
 };
 
-// Generic validation for ID parameters
+// Algemene validatie voor ID parameters
 export const validateId = (req, res, next) => {
   const id = parseInt(req.params.id);
 
@@ -160,11 +160,11 @@ export const validateId = (req, res, next) => {
     });
   }
 
-  // Validation passed, continue to next middleware
+  // Validatie geslaagd, ga door naar volgende middleware
   next();
 };
 
-// Email validation (for future user functionality)
+// Email validatie (voor toekomstige gebruikersfunctionaliteit)
 export const validateEmail = (email) => {
   if (isEmpty(email)) {
     return { valid: false, message: 'Email is required' };

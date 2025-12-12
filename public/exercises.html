@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercises Manager</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            color: #764ba2;
+            margin-bottom: 10px;
+        }
+
+        nav {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        nav a {
+            padding: 10px 20px;
+            background: #764ba2;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        nav a:hover {
+            background: #667eea;
+        }
+
+        .section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #764ba2;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        button {
+            background: #764ba2;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #667eea;
+        }
+
+        button.delete {
+            background: #f93e3e;
+        }
+
+        button.delete:hover {
+            background: #d32f2f;
+        }
+
+        button.edit {
+            background: #fca130;
+        }
+
+        button.edit:hover {
+            background: #f57c00;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #f8f9fa;
+            color: #764ba2;
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #764ba2;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Workout Tracker - Exercises Manager</h1>
+            <p>Beheer je oefeningen</p>
+            <nav>
+                <a href="/workouts.html">Workouts</a>
+                <a href="/exercises.html">Exercises</a>
+                <a href="/">API Documentatie</a>
+            </nav>
+        </header>
+
+        <div id="message" class="hidden"></div>
+
+        <div class="section">
+            <h2 id="formTitle">Nieuwe Exercise Toevoegen</h2>
+            <form id="exerciseForm">
+                <input type="hidden" id="exerciseId">
+
+                <div class="form-group">
+                    <label for="workout_id">Workout *</label>
+                    <select id="workout_id" required>
+                        <option value="">Selecteer workout...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="name">Naam *</label>
+                    <input type="text" id="name" required placeholder="bijv. Bench Press">
+                </div>
+
+                <div class="form-group">
+                    <label for="muscle_group">Spiergroep *</label>
+                    <select id="muscle_group" required>
+                        <option value="">Selecteer spiergroep...</option>
+                        <option value="chest">Chest (Borst)</option>
+                        <option value="back">Back (Rug)</option>
+                        <option value="legs">Legs (Benen)</option>
+                        <option value="shoulders">Shoulders (Schouders)</option>
+                        <option value="arms">Arms (Armen)</option>
+                        <option value="core">Core (Kern)</option>
+                        <option value="full_body">Full Body</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="sets">Sets *</label>
+                        <input type="number" id="sets" required min="1" placeholder="bijv. 4">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reps">Reps *</label>
+                        <input type="number" id="reps" required min="1" placeholder="bijv. 12">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="weight">Gewicht (kg) - Optioneel</label>
+                    <input type="number" id="weight" step="0.01" min="0" placeholder="bijv. 80.5">
+                </div>
+
+                <button type="submit" id="submitBtn">Toevoegen</button>
+                <button type="button" onclick="resetForm()" style="background: #6c757d;">Annuleren</button>
+            </form>
+        </div>
+
+        <div class="section">
+            <h2>Alle Exercises</h2>
+            <div id="loading" class="loading hidden">Laden...</div>
+            <div id="exercisesList"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api/exercises';
+        const WORKOUTS_API_URL = 'http://localhost:3000/api/workouts';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadWorkouts();
+            loadExercises();
+        });
+
+        function showMessage(text, type = 'success') {
+            const messageEl = document.getElementById('message');
+            messageEl.className = `message ${type}`;
+            messageEl.textContent = text;
+            messageEl.classList.remove('hidden');
+
+            setTimeout(() => {
+                messageEl.classList.add('hidden');
+            }, 5000);
+        }
+
+        async function loadWorkouts() {
+            try {
+                const response = await fetch(WORKOUTS_API_URL);
+                const data = await response.json();
+
+                if (data.success) {
+                    const select = document.getElementById('workout_id');
+                    select.innerHTML = '<option value="">Selecteer workout...</option>';
+
+                    data.data.forEach(workout => {
+                        const option = document.createElement('option');
+                        option.value = workout.id;
+                        const date = new Date(workout.date).toLocaleDateString('nl-NL');
+                        option.textContent = `${workout.name} (${date})`;
+                        select.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading workouts:', error);
+            }
+        }
+
+        async function loadExercises() {
+            const loadingEl = document.getElementById('loading');
+            const listEl = document.getElementById('exercisesList');
+
+            loadingEl.classList.remove('hidden');
+
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+
+                if (data.success) {
+                    displayExercises(data.data);
+                } else {
+                    showMessage('Error bij het laden van exercises', 'error');
+                }
+            } catch (error) {
+                showMessage('Kan geen verbinding maken met de server', 'error');
+                console.error('Error:', error);
+            } finally {
+                loadingEl.classList.add('hidden');
+            }
+        }
+
+        function displayExercises(exercises) {
+            const listEl = document.getElementById('exercisesList');
+
+            if (exercises.length === 0) {
+                listEl.innerHTML = '<p>Geen exercises gevonden. Voeg je eerste exercise toe!</p>';
+                return;
+            }
+
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Naam</th>
+                            <th>Workout</th>
+                            <th>Spiergroep</th>
+                            <th>Sets</th>
+                            <th>Reps</th>
+                            <th>Gewicht (kg)</th>
+                            <th>Acties</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            exercises.forEach(exercise => {
+                const weight = exercise.weight ? exercise.weight : '-';
+                html += `
+                    <tr>
+                        <td>${exercise.id}</td>
+                        <td>${exercise.name}</td>
+                        <td>${exercise.workout_name || 'N/A'}</td>
+                        <td>${exercise.muscle_group}</td>
+                        <td>${exercise.sets}</td>
+                        <td>${exercise.reps}</td>
+                        <td>${weight}</td>
+                        <td>
+                            <div class="actions">
+                                <button class="edit" onclick="editExercise(${exercise.id})">Bewerken</button>
+                                <button class="delete" onclick="deleteExercise(${exercise.id}, '${exercise.name}')">Verwijderen</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                    </tbody>
+                </table>
+            `;
+
+            listEl.innerHTML = html;
+        }
+
+        document.getElementById('exerciseForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const id = document.getElementById('exerciseId').value;
+            const exercise = {
+                workout_id: parseInt(document.getElementById('workout_id').value),
+                name: document.getElementById('name').value,
+                muscle_group: document.getElementById('muscle_group').value,
+                sets: parseInt(document.getElementById('sets').value),
+                reps: parseInt(document.getElementById('reps').value),
+                weight: document.getElementById('weight').value ? parseFloat(document.getElementById('weight').value) : null
+            };
+
+            try {
+                let response;
+                if (id) {
+                    response = await fetch(`${API_URL}/${id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(exercise)
+                    });
+                } else {
+                    response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(exercise)
+                    });
+                }
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showMessage(data.message);
+                    resetForm();
+                    loadExercises();
+                } else {
+                    showMessage(data.message || 'Er is een fout opgetreden', 'error');
+                }
+            } catch (error) {
+                showMessage('Kan geen verbinding maken met de server', 'error');
+                console.error('Error:', error);
+            }
+        });
+
+        async function editExercise(id) {
+            try {
+                const response = await fetch(`${API_URL}/${id}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    const exercise = data.data;
+                    document.getElementById('exerciseId').value = exercise.id;
+                    document.getElementById('workout_id').value = exercise.workout_id;
+                    document.getElementById('name').value = exercise.name;
+                    document.getElementById('muscle_group').value = exercise.muscle_group;
+                    document.getElementById('sets').value = exercise.sets;
+                    document.getElementById('reps').value = exercise.reps;
+                    document.getElementById('weight').value = exercise.weight || '';
+
+                    document.getElementById('formTitle').textContent = 'Exercise Bewerken';
+                    document.getElementById('submitBtn').textContent = 'Bijwerken';
+
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    showMessage('Exercise niet gevonden', 'error');
+                }
+            } catch (error) {
+                showMessage('Kan exercise niet laden', 'error');
+                console.error('Error:', error);
+            }
+        }
+
+        async function deleteExercise(id, name) {
+            if (!confirm(`Weet je zeker dat je "${name}" wilt verwijderen?`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/${id}`, {
+                    method: 'DELETE'
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showMessage(data.message);
+                    loadExercises();
+                } else {
+                    showMessage(data.message || 'Kan exercise niet verwijderen', 'error');
+                }
+            } catch (error) {
+                showMessage('Kan geen verbinding maken met de server', 'error');
+                console.error('Error:', error);
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('exerciseForm').reset();
+            document.getElementById('exerciseId').value = '';
+            document.getElementById('formTitle').textContent = 'Nieuwe Exercise Toevoegen';
+            document.getElementById('submitBtn').textContent = 'Toevoegen';
+        }
+    </script>
+</body>
+</html>

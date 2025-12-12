@@ -1,11 +1,11 @@
 import Workout from '../models/Workout.js';
 
-// Get all workouts (with optional pagination via query params)
+// Haal alle workouts op (met optionele paginatie via query params)
 export const getAllWorkouts = async (req, res) => {
   try {
     const { limit, offset } = req.query;
 
-    // If limit and offset are provided, use pagination
+    // Als limit en offset gegeven zijn, gebruik paginatie
     if (limit && offset !== undefined) {
       const result = await Workout.getAllPaginated(limit, offset);
       return res.json({
@@ -14,7 +14,7 @@ export const getAllWorkouts = async (req, res) => {
       });
     }
 
-    // Otherwise, return all workouts
+    // Anders, geef alle workouts terug
     const workouts = await Workout.getAll();
     res.json({
       success: true,
@@ -29,7 +29,7 @@ export const getAllWorkouts = async (req, res) => {
   }
 };
 
-// Search workouts
+// Zoek workouts
 export const searchWorkouts = async (req, res) => {
   try {
     const { name } = req.query;
@@ -56,7 +56,7 @@ export const searchWorkouts = async (req, res) => {
   }
 };
 
-// Get workout by ID
+// Haal workout op via ID
 export const getWorkoutById = async (req, res) => {
   try {
     const workout = await Workout.getById(req.params.id);
@@ -81,7 +81,7 @@ export const getWorkoutById = async (req, res) => {
   }
 };
 
-// Create new workout
+// Maak nieuwe workout aan
 export const createWorkout = async (req, res) => {
   try {
     const { name, date, duration, type } = req.body;
@@ -129,7 +129,7 @@ export const updateWorkout = async (req, res) => {
   }
 };
 
-// Delete workout
+// Verwijder workout
 export const deleteWorkout = async (req, res) => {
   try {
     const deleted = await Workout.delete(req.params.id);

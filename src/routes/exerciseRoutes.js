@@ -11,25 +11,25 @@ import {
 
 const router = express.Router();
 
-// GET all exercises (supports pagination via ?limit=10&offset=0)
+// Haal alle exercises op (ondersteunt paginatie via ?limit=10&offset=0)
 router.get('/', getAllExercises);
 
-// GET search exercises (must be before /:id route)
+// Zoek exercises (moet voor /:id route komen)
 router.get('/search', searchExercises);
 
-// GET exercises by workout ID
+// Haal exercises op via workout ID
 router.get('/workout/:workoutId', getExercisesByWorkout);
 
-// GET exercise by ID
+// Haal exercise op via ID
 router.get('/:id', getExerciseById);
 
-// POST new exercise
+// Maak nieuwe exercise aan
 router.post('/', createExercise);
 
-// PUT update exercise
+// Update exercise
 router.put('/:id', updateExercise);
 
-// DELETE exercise
+// Verwijder exercise
 router.delete('/:id', deleteExercise);
 
 export default router;
