@@ -95,10 +95,10 @@ class Exercise {
   // Create new exercise
   static async create(data) {
     try {
-      const { workout_id, name, muscle_group, sets, reps, weight } = data;
+      const { workout_id, name, muscle_group, sets, reps, weight, notes } = data;
       const [result] = await db.query(
-        'INSERT INTO exercises (workout_id, name, muscle_group, sets, reps, weight) VALUES (?, ?, ?, ?, ?, ?)',
-        [workout_id, name, muscle_group, sets, reps, weight || null]
+        'INSERT INTO exercises (workout_id, name, muscle_group, sets, reps, weight, notes) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [workout_id, name, muscle_group, sets, reps, weight || null, notes || null]
       );
       return { id: result.insertId, ...data };
     } catch (error) {
@@ -109,10 +109,10 @@ class Exercise {
   // Update exercise
   static async update(id, data) {
     try {
-      const { workout_id, name, muscle_group, sets, reps, weight } = data;
+      const { workout_id, name, muscle_group, sets, reps, weight, notes } = data;
       const [result] = await db.query(
-        'UPDATE exercises SET workout_id = ?, name = ?, muscle_group = ?, sets = ?, reps = ?, weight = ? WHERE id = ?',
-        [workout_id, name, muscle_group, sets, reps, weight || null, id]
+        'UPDATE exercises SET workout_id = ?, name = ?, muscle_group = ?, sets = ?, reps = ?, weight = ?, notes = ? WHERE id = ?',
+        [workout_id, name, muscle_group, sets, reps, weight || null, notes || null, id]
       );
       return result.affectedRows > 0;
     } catch (error) {

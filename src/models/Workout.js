@@ -63,10 +63,10 @@ class Workout {
   // Create new workout
   static async create(data) {
     try {
-      const { name, date, duration, type } = data;
+      const { name, date, duration, type, notes } = data;
       const [result] = await db.query(
-        'INSERT INTO workouts (name, date, duration, type) VALUES (?, ?, ?, ?)',
-        [name, date, duration, type]
+        'INSERT INTO workouts (name, date, duration, type, notes) VALUES (?, ?, ?, ?, ?)',
+        [name, date, duration, type, notes || null]
       );
       return { id: result.insertId, ...data };
     } catch (error) {
@@ -77,10 +77,10 @@ class Workout {
   // Update workout
   static async update(id, data) {
     try {
-      const { name, date, duration, type } = data;
+      const { name, date, duration, type, notes } = data;
       const [result] = await db.query(
-        'UPDATE workouts SET name = ?, date = ?, duration = ?, type = ? WHERE id = ?',
-        [name, date, duration, type, id]
+        'UPDATE workouts SET name = ?, date = ?, duration = ?, type = ?, notes = ? WHERE id = ?',
+        [name, date, duration, type, notes || null, id]
       );
       return result.affectedRows > 0;
     } catch (error) {

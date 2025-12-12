@@ -84,9 +84,9 @@ export const getWorkoutById = async (req, res) => {
 // Create new workout
 export const createWorkout = async (req, res) => {
   try {
-    const { name, date, duration, type } = req.body;
+    const { name, date, duration, type, notes } = req.body;
 
-    const newWorkout = await Workout.create({ name, date, duration, type });
+    const newWorkout = await Workout.create({ name, date, duration, type, notes });
 
     res.status(201).json({
       success: true,
@@ -105,9 +105,9 @@ export const createWorkout = async (req, res) => {
 // Update workout
 export const updateWorkout = async (req, res) => {
   try {
-    const { name, date, duration, type } = req.body;
+    const { name, date, duration, type, notes } = req.body;
 
-    const updated = await Workout.update(req.params.id, { name, date, duration, type });
+    const updated = await Workout.update(req.params.id, { name, date, duration, type, notes });
 
     if (!updated) {
       return res.status(404).json({
