@@ -16,6 +16,53 @@ class Exercise {
     }
   }
 
+  // Get all exercises with pagination
+  static async getAllPaginated(limit = 10, offset = 0) {
+    try {
+      const [rows] = await db.query(
+        `SELECT e.*, w.name as workout_name, w.date as workout_date
+         FROM exercises e
+         LEFT JOIN workouts w ON e.workout_id = w.id
+         ORDER BY e.created_at DESC
+         LIMIT ? OFFSET ?`,
+        [parseInt(limit), parseInt(offset)]
+      );
+
+      // Get total count for pagination info
+      const [countResult] = await db.query('SELECT COUNT(*) as total FROM exercises');
+      const total = countResult[0].total;
+
+      return {
+        data: rows,
+        pagination: {
+          total,
+          limit: parseInt(limit),
+          offset: parseInt(offset),
+          totalPages: Math.ceil(total / limit)
+        }
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // Search exercises by name or muscle group
+  static async search(searchTerm) {
+    try {
+      const [rows] = await db.query(
+        `SELECT e.*, w.name as workout_name, w.date as workout_date
+         FROM exercises e
+         LEFT JOIN workouts w ON e.workout_id = w.id
+         WHERE e.name LIKE ? OR e.muscle_group LIKE ?
+         ORDER BY e.created_at DESC`,
+        [`%${searchTerm}%`, `%${searchTerm}%`]
+      );
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   // Get exercises by workout ID
   static async getByWorkoutId(workoutId) {
     try {

@@ -1,6 +1,7 @@
 import express from 'express';
 import {
   getAllWorkouts,
+  searchWorkouts,
   getWorkoutById,
   createWorkout,
   updateWorkout,
@@ -10,8 +11,11 @@ import { validateWorkout, validateId } from '../middleware/validation.js';
 
 const router = express.Router();
 
-// GET all workouts
+// GET all workouts (supports pagination via ?limit=10&offset=0)
 router.get('/', getAllWorkouts);
+
+// GET search workouts (must be before /:id route)
+router.get('/search', searchWorkouts);
 
 // GET workout by ID
 router.get('/:id', validateId, getWorkoutById);

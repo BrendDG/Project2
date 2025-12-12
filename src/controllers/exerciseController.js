@@ -1,8 +1,20 @@
 import Exercise from '../models/Exercise.js';
 
-// Get all exercises
+// Get all exercises (with optional pagination via query params)
 export const getAllExercises = async (req, res) => {
   try {
+    const { limit, offset } = req.query;
+
+    // If limit and offset are provided, use pagination
+    if (limit && offset !== undefined) {
+      const result = await Exercise.getAllPaginated(limit, offset);
+      return res.json({
+        success: true,
+        ...result
+      });
+    }
+
+    // Otherwise, return all exercises
     const exercises = await Exercise.getAll();
     res.json({
       success: true,
@@ -12,6 +24,33 @@ export const getAllExercises = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error fetching exercises',
+      error: error.message
+    });
+  }
+};
+
+// Search exercises
+export const searchExercises = async (req, res) => {
+  try {
+    const { name } = req.query;
+
+    if (!name) {
+      return res.status(400).json({
+        success: false,
+        message: 'Search term (name) is required'
+      });
+    }
+
+    const exercises = await Exercise.search(name);
+    res.json({
+      success: true,
+      data: exercises,
+      count: exercises.length
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error searching exercises',
       error: error.message
     });
   }
