@@ -1,7 +1,7 @@
 import db from '../config/database.js';
 
 class Workout {
-  // Get all workouts
+  // Haal alle workouts op
   static async getAll() {
     try {
       const [rows] = await db.query('SELECT * FROM workouts ORDER BY date DESC');
@@ -11,7 +11,7 @@ class Workout {
     }
   }
 
-  // Get all workouts with pagination
+  // Haal alle workouts op met paginatie
   static async getAllPaginated(limit = 10, offset = 0) {
     try {
       const [rows] = await db.query(
@@ -19,7 +19,7 @@ class Workout {
         [parseInt(limit), parseInt(offset)]
       );
 
-      // Get total count for pagination info
+      // Haal totaal aantal op voor paginatie informatie
       const [countResult] = await db.query('SELECT COUNT(*) as total FROM workouts');
       const total = countResult[0].total;
 
@@ -37,7 +37,7 @@ class Workout {
     }
   }
 
-  // Search workouts by name or type
+  // Zoek workouts op naam of type
   static async search(searchTerm) {
     try {
       const [rows] = await db.query(
@@ -50,7 +50,7 @@ class Workout {
     }
   }
 
-  // Get workout by ID
+  // Haal workout op via ID
   static async getById(id) {
     try {
       const [rows] = await db.query('SELECT * FROM workouts WHERE id = ?', [id]);
@@ -60,7 +60,7 @@ class Workout {
     }
   }
 
-  // Create new workout
+  // Maak nieuwe workout aan
   static async create(data) {
     try {
       const { name, date, duration, type } = data;
@@ -88,7 +88,7 @@ class Workout {
     }
   }
 
-  // Delete workout
+  // Verwijder workout
   static async delete(id) {
     try {
       const [result] = await db.query('DELETE FROM workouts WHERE id = ?', [id]);

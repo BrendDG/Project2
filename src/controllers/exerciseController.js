@@ -1,11 +1,11 @@
 import Exercise from '../models/Exercise.js';
 
-// Get all exercises (with optional pagination via query params)
+// Haal alle exercises op (met optionele paginatie via query params)
 export const getAllExercises = async (req, res) => {
   try {
     const { limit, offset } = req.query;
 
-    // If limit and offset are provided, use pagination
+    // Als limit en offset gegeven zijn, gebruik paginatie
     if (limit && offset !== undefined) {
       const result = await Exercise.getAllPaginated(limit, offset);
       return res.json({
@@ -14,7 +14,7 @@ export const getAllExercises = async (req, res) => {
       });
     }
 
-    // Otherwise, return all exercises
+    // Anders, geef alle exercises terug
     const exercises = await Exercise.getAll();
     res.json({
       success: true,
@@ -29,7 +29,7 @@ export const getAllExercises = async (req, res) => {
   }
 };
 
-// Search exercises
+// Zoek exercises
 export const searchExercises = async (req, res) => {
   try {
     const { name } = req.query;
@@ -56,7 +56,7 @@ export const searchExercises = async (req, res) => {
   }
 };
 
-// Get exercises by workout ID
+// Haal exercises op via workout ID
 export const getExercisesByWorkout = async (req, res) => {
   try {
     const exercises = await Exercise.getByWorkoutId(req.params.workoutId);
@@ -73,7 +73,7 @@ export const getExercisesByWorkout = async (req, res) => {
   }
 };
 
-// Get exercise by ID
+// Haal exercise op via ID
 export const getExerciseById = async (req, res) => {
   try {
     const exercise = await Exercise.getById(req.params.id);
@@ -98,12 +98,12 @@ export const getExerciseById = async (req, res) => {
   }
 };
 
-// Create new exercise
+// Maak nieuwe exercise aan
 export const createExercise = async (req, res) => {
   try {
     const { workout_id, name, muscle_group, sets, reps, weight } = req.body;
 
-    // Validation
+    // Validatie
     if (!workout_id || !name || !muscle_group || !sets || !reps) {
       return res.status(400).json({
         success: false,
@@ -139,7 +139,7 @@ export const updateExercise = async (req, res) => {
   try {
     const { workout_id, name, muscle_group, sets, reps, weight } = req.body;
 
-    // Validation
+    // Validatie
     if (!workout_id || !name || !muscle_group || !sets || !reps) {
       return res.status(400).json({
         success: false,
@@ -176,7 +176,7 @@ export const updateExercise = async (req, res) => {
   }
 };
 
-// Delete exercise
+// Verwijder exercise
 export const deleteExercise = async (req, res) => {
   try {
     const deleted = await Exercise.delete(req.params.id);

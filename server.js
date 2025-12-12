@@ -1,8 +1,8 @@
 /**
- * Workout Tracker API - Main Server File
+ * Workout Tracker API - Hoofd Server Bestand
  *
- * A RESTful API for managing workouts and exercises
- * Built with Node.js, Express, and MySQL
+ * Een RESTful API voor het beheren van workouts en oefeningen
+ * Gebouwd met Node.js, Express en MySQL
  */
 
 import express from 'express';
@@ -12,22 +12,18 @@ import { testConnection } from './src/config/database.js';
 import workoutRoutes from './src/routes/workoutRoutes.js';
 import exerciseRoutes from './src/routes/exerciseRoutes.js';
 
+// CONFIGURATIE
 
-// CONFIGURATION
-
-
-// Load environment variables
+// Laad environment variabelen
 dotenv.config();
 
-// Initialize Express app
+// Initialiseer Express applicatie
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-
 // MIDDLEWARE
 
-
-// Enable CORS
+// Activeer CORS
 app.use(cors());
 
 // Parse JSON request bodies
@@ -36,19 +32,15 @@ app.use(express.json());
 // Parse URL-encoded request bodies
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files (HTML documentation)
+// Serveer statische bestanden (HTML documentatie)
 app.use(express.static('public'));
 
+// DATABASE CONNECTIE
 
-// DATABASE CONNECTION
-
-
-// Test database connection on startup
+// Test database connectie bij opstarten
 testConnection();
 
-
 // API ROUTES
-
 
 // Workout routes
 app.use('/api/workouts', workoutRoutes);
@@ -56,11 +48,9 @@ app.use('/api/workouts', workoutRoutes);
 // Exercise routes
 app.use('/api/exercises', exerciseRoutes);
 
-
 // ERROR HANDLING
 
-
-// 404 handler - Route not found
+// 404 handler - Route niet gevonden
 app.use((req, res) => {
   res.status(404).json({
     success: false,
@@ -69,7 +59,7 @@ app.use((req, res) => {
   });
 });
 
-// Global error handler
+// Globale error handler
 app.use((err, req, res, next) => {
   console.error('Error:', err.stack);
   res.status(err.status || 500).json({
@@ -79,41 +69,37 @@ app.use((err, req, res, next) => {
   });
 });
 
-
 // START SERVER
-
 
 const server = app.listen(PORT, () => {
   console.log('='.repeat(50));
   console.log('  Workout Tracker API');
   console.log('='.repeat(50));
-  console.log(`  Server running on port ${PORT}`);
+  console.log(`  Server draait op poort ${PORT}`);
   console.log(`  Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log('');
-  console.log('  Available endpoints:');
-  console.log(`  - Documentation: http://localhost:${PORT}`);
+  console.log('  Beschikbare endpoints:');
+  console.log(`  - Documentatie: http://localhost:${PORT}`);
   console.log(`  - Workouts API:  http://localhost:${PORT}/api/workouts`);
   console.log(`  - Exercises API: http://localhost:${PORT}/api/exercises`);
   console.log('='.repeat(50));
 });
 
-
 // GRACEFUL SHUTDOWN
 
-
-// Handle graceful shutdown
+// Afhandeling van graceful shutdown
 process.on('SIGTERM', () => {
-  console.log('SIGTERM signal received: closing HTTP server');
+  console.log('SIGTERM signaal ontvangen: sluit HTTP server');
   server.close(() => {
-    console.log('HTTP server closed');
+    console.log('HTTP server gesloten');
     process.exit(0);
   });
 });
 
 process.on('SIGINT', () => {
-  console.log('\nSIGINT signal received: closing HTTP server');
+  console.log('\nSIGINT signaal ontvangen: sluit HTTP server');
   server.close(() => {
-    console.log('HTTP server closed');
+    console.log('HTTP server gesloten');
     process.exit(0);
   });
 });

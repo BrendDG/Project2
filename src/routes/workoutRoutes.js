@@ -11,22 +11,22 @@ import { validateWorkout, validateId } from '../middleware/validation.js';
 
 const router = express.Router();
 
-// GET all workouts (supports pagination via ?limit=10&offset=0)
+// Haal alle workouts op (ondersteunt paginatie via ?limit=10&offset=0)
 router.get('/', getAllWorkouts);
 
-// GET search workouts (must be before /:id route)
+// Zoek workouts (moet voor /:id route komen)
 router.get('/search', searchWorkouts);
 
-// GET workout by ID
+// Haal workout op via ID
 router.get('/:id', validateId, getWorkoutById);
 
-// POST new workout
+// Maak nieuwe workout aan
 router.post('/', validateWorkout, createWorkout);
 
-// PUT update workout
+// Update workout
 router.put('/:id', validateId, validateWorkout, updateWorkout);
 
-// DELETE workout
+// Verwijder workout
 router.delete('/:id', validateId, deleteWorkout);
 
 export default router;
