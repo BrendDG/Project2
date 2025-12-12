@@ -12,9 +12,9 @@ import { testConnection } from './src/config/database.js';
 import workoutRoutes from './src/routes/workoutRoutes.js';
 import exerciseRoutes from './src/routes/exerciseRoutes.js';
 
-// ====================================
+
 // CONFIGURATION
-// ====================================
+
 
 // Load environment variables
 dotenv.config();
@@ -23,9 +23,9 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ====================================
+
 // MIDDLEWARE
-// ====================================
+
 
 // Enable CORS
 app.use(cors());
@@ -39,16 +39,16 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static files (HTML documentation)
 app.use(express.static('public'));
 
-// ====================================
+
 // DATABASE CONNECTION
-// ====================================
+
 
 // Test database connection on startup
 testConnection();
 
-// ====================================
+
 // API ROUTES
-// ====================================
+
 
 // Workout routes
 app.use('/api/workouts', workoutRoutes);
@@ -56,9 +56,9 @@ app.use('/api/workouts', workoutRoutes);
 // Exercise routes
 app.use('/api/exercises', exerciseRoutes);
 
-// ====================================
+
 // ERROR HANDLING
-// ====================================
+
 
 // 404 handler - Route not found
 app.use((req, res) => {
@@ -79,9 +79,9 @@ app.use((err, req, res, next) => {
   });
 });
 
-// ====================================
+
 // START SERVER
-// ====================================
+
 
 const server = app.listen(PORT, () => {
   console.log('='.repeat(50));
@@ -97,9 +97,9 @@ const server = app.listen(PORT, () => {
   console.log('='.repeat(50));
 });
 
-// ====================================
+
 // GRACEFUL SHUTDOWN
-// ====================================
+
 
 // Handle graceful shutdown
 process.on('SIGTERM', () => {
