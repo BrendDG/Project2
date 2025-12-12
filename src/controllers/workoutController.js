@@ -1,8 +1,20 @@
 import Workout from '../models/Workout.js';
 
-// Get all workouts
+// Get all workouts (with optional pagination via query params)
 export const getAllWorkouts = async (req, res) => {
   try {
+    const { limit, offset } = req.query;
+
+    // If limit and offset are provided, use pagination
+    if (limit && offset !== undefined) {
+      const result = await Workout.getAllPaginated(limit, offset);
+      return res.json({
+        success: true,
+        ...result
+      });
+    }
+
+    // Otherwise, return all workouts
     const workouts = await Workout.getAll();
     res.json({
       success: true,
@@ -12,6 +24,33 @@ export const getAllWorkouts = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error fetching workouts',
+      error: error.message
+    });
+  }
+};
+
+// Search workouts
+export const searchWorkouts = async (req, res) => {
+  try {
+    const { name } = req.query;
+
+    if (!name) {
+      return res.status(400).json({
+        success: false,
+        message: 'Search term (name) is required'
+      });
+    }
+
+    const workouts = await Workout.search(name);
+    res.json({
+      success: true,
+      data: workouts,
+      count: workouts.length
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error searching workouts',
       error: error.message
     });
   }

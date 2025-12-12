@@ -11,6 +11,45 @@ class Workout {
     }
   }
 
+  // Get all workouts with pagination
+  static async getAllPaginated(limit = 10, offset = 0) {
+    try {
+      const [rows] = await db.query(
+        'SELECT * FROM workouts ORDER BY date DESC LIMIT ? OFFSET ?',
+        [parseInt(limit), parseInt(offset)]
+      );
+
+      // Get total count for pagination info
+      const [countResult] = await db.query('SELECT COUNT(*) as total FROM workouts');
+      const total = countResult[0].total;
+
+      return {
+        data: rows,
+        pagination: {
+          total,
+          limit: parseInt(limit),
+          offset: parseInt(offset),
+          totalPages: Math.ceil(total / limit)
+        }
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // Search workouts by name or type
+  static async search(searchTerm) {
+    try {
+      const [rows] = await db.query(
+        'SELECT * FROM workouts WHERE name LIKE ? OR type LIKE ? ORDER BY date DESC',
+        [`%${searchTerm}%`, `%${searchTerm}%`]
+      );
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   // Get workout by ID
   static async getById(id) {
     try {

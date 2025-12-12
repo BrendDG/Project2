@@ -1,6 +1,7 @@
 import express from 'express';
 import {
   getAllExercises,
+  searchExercises,
   getExercisesByWorkout,
   getExerciseById,
   createExercise,
@@ -10,8 +11,11 @@ import {
 
 const router = express.Router();
 
-// GET all exercises
+// GET all exercises (supports pagination via ?limit=10&offset=0)
 router.get('/', getAllExercises);
+
+// GET search exercises (must be before /:id route)
+router.get('/search', searchExercises);
 
 // GET exercises by workout ID
 router.get('/workout/:workoutId', getExercisesByWorkout);
