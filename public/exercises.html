@@ -79,12 +79,13 @@
             color: #333;
         }
 
-        input, select {
+        input, select, textarea {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 14px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         button {
@@ -195,6 +196,7 @@
             <nav>
                 <a href="/workouts.html">Workouts</a>
                 <a href="/exercises.html">Exercises</a>
+                <a href="/statistics.html">Statistics</a>
                 <a href="/">API Documentatie</a>
             </nav>
         </header>
@@ -249,6 +251,11 @@
                 <div class="form-group">
                     <label for="weight">Gewicht (kg) - Optioneel</label>
                     <input type="number" id="weight" step="0.01" min="0" placeholder="bijv. 80.5">
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">Notities - Optioneel</label>
+                    <textarea id="notes" rows="3" placeholder="bijv. Nieuwe PR! Goede vorm gehad."></textarea>
                 </div>
 
                 <button type="submit" id="submitBtn">Toevoegen</button>
@@ -399,7 +406,8 @@
                 muscle_group: document.getElementById('muscle_group').value,
                 sets: parseInt(document.getElementById('sets').value),
                 reps: parseInt(document.getElementById('reps').value),
-                weight: document.getElementById('weight').value ? parseFloat(document.getElementById('weight').value) : null
+                weight: document.getElementById('weight').value ? parseFloat(document.getElementById('weight').value) : null,
+                notes: document.getElementById('notes').value || null
             };
 
             try {
@@ -450,6 +458,7 @@
                     document.getElementById('sets').value = exercise.sets;
                     document.getElementById('reps').value = exercise.reps;
                     document.getElementById('weight').value = exercise.weight || '';
+                    document.getElementById('notes').value = exercise.notes || '';
 
                     document.getElementById('formTitle').textContent = 'Exercise Bewerken';
                     document.getElementById('submitBtn').textContent = 'Bijwerken';
