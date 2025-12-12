@@ -187,8 +187,10 @@
             </nav>
         </header>
 
+        <!-- Message Area -->
         <div id="message" class="hidden"></div>
 
+        <!-- Add/Edit Form -->
         <div class="section">
             <h2 id="formTitle">Nieuwe Workout Toevoegen</h2>
             <form id="workoutForm">
@@ -226,6 +228,7 @@
             </form>
         </div>
 
+        <!-- Workouts List -->
         <div class="section">
             <h2>Alle Workouts</h2>
             <div id="loading" class="loading hidden">Laden...</div>
@@ -235,17 +238,21 @@
 
     <script>
         const API_URL = 'http://localhost:3000/api/workouts';
+        let editingId = null;
 
+        // Load workouts on page load
         document.addEventListener('DOMContentLoaded', () => {
             loadWorkouts();
             setDefaultDate();
         });
 
+        // Set today's date as default
         function setDefaultDate() {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('date').value = today;
         }
 
+        // Show message
         function showMessage(text, type = 'success') {
             const messageEl = document.getElementById('message');
             messageEl.className = `message ${type}`;
@@ -257,6 +264,7 @@
             }, 5000);
         }
 
+        // Load all workouts
         async function loadWorkouts() {
             const loadingEl = document.getElementById('loading');
             const listEl = document.getElementById('workoutsList');
@@ -280,6 +288,7 @@
             }
         }
 
+        // Display workouts in table
         function displayWorkouts(workouts) {
             const listEl = document.getElementById('workoutsList');
 
@@ -330,6 +339,7 @@
             listEl.innerHTML = html;
         }
 
+        // Handle form submission
         document.getElementById('workoutForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -344,12 +354,14 @@
             try {
                 let response;
                 if (id) {
+                    // Update
                     response = await fetch(`${API_URL}/${id}`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(workout)
                     });
                 } else {
+                    // Create
                     response = await fetch(API_URL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -372,6 +384,7 @@
             }
         });
 
+        // Edit workout
         async function editWorkout(id) {
             try {
                 const response = await fetch(`${API_URL}/${id}`);
@@ -398,6 +411,7 @@
             }
         }
 
+        // Delete workout
         async function deleteWorkout(id, name) {
             if (!confirm(`Weet je zeker dat je "${name}" wilt verwijderen?`)) {
                 return;
@@ -422,6 +436,7 @@
             }
         }
 
+        // Reset form
         function resetForm() {
             document.getElementById('workoutForm').reset();
             document.getElementById('workoutId').value = '';

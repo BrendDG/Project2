@@ -19,7 +19,7 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
@@ -199,8 +199,10 @@
             </nav>
         </header>
 
+        <!-- Message Area -->
         <div id="message" class="hidden"></div>
 
+        <!-- Add/Edit Form -->
         <div class="section">
             <h2 id="formTitle">Nieuwe Exercise Toevoegen</h2>
             <form id="exerciseForm">
@@ -254,6 +256,7 @@
             </form>
         </div>
 
+        <!-- Exercises List -->
         <div class="section">
             <h2>Alle Exercises</h2>
             <div id="loading" class="loading hidden">Laden...</div>
@@ -265,11 +268,13 @@
         const API_URL = 'http://localhost:3000/api/exercises';
         const WORKOUTS_API_URL = 'http://localhost:3000/api/workouts';
 
+        // Load exercises and workouts on page load
         document.addEventListener('DOMContentLoaded', () => {
             loadWorkouts();
             loadExercises();
         });
 
+        // Show message
         function showMessage(text, type = 'success') {
             const messageEl = document.getElementById('message');
             messageEl.className = `message ${type}`;
@@ -281,6 +286,7 @@
             }, 5000);
         }
 
+        // Load workouts for dropdown
         async function loadWorkouts() {
             try {
                 const response = await fetch(WORKOUTS_API_URL);
@@ -303,6 +309,7 @@
             }
         }
 
+        // Load all exercises
         async function loadExercises() {
             const loadingEl = document.getElementById('loading');
             const listEl = document.getElementById('exercisesList');
@@ -326,6 +333,7 @@
             }
         }
 
+        // Display exercises in table
         function displayExercises(exercises) {
             const listEl = document.getElementById('exercisesList');
 
@@ -380,6 +388,7 @@
             listEl.innerHTML = html;
         }
 
+        // Handle form submission
         document.getElementById('exerciseForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -396,12 +405,14 @@
             try {
                 let response;
                 if (id) {
+                    // Update
                     response = await fetch(`${API_URL}/${id}`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(exercise)
                     });
                 } else {
+                    // Create
                     response = await fetch(API_URL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -424,6 +435,7 @@
             }
         });
 
+        // Edit exercise
         async function editExercise(id) {
             try {
                 const response = await fetch(`${API_URL}/${id}`);
@@ -452,6 +464,7 @@
             }
         }
 
+        // Delete exercise
         async function deleteExercise(id, name) {
             if (!confirm(`Weet je zeker dat je "${name}" wilt verwijderen?`)) {
                 return;
@@ -476,6 +489,7 @@
             }
         }
 
+        // Reset form
         function resetForm() {
             document.getElementById('exerciseForm').reset();
             document.getElementById('exerciseId').value = '';
