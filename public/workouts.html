@@ -79,12 +79,13 @@
             color: #333;
         }
 
-        input, select {
+        input, select, textarea {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 14px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         button {
@@ -183,6 +184,7 @@
             <nav>
                 <a href="/workouts.html">Workouts</a>
                 <a href="/exercises.html">Exercises</a>
+                <a href="/statistics.html">Statistics</a>
                 <a href="/">API Documentatie</a>
             </nav>
         </header>
@@ -221,6 +223,11 @@
                         <option value="sports">Sports</option>
                         <option value="mixed">Mixed</option>
                     </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">Notities - Optioneel</label>
+                    <textarea id="notes" rows="3" placeholder="bijv. Voelde me goed vandaag, nieuwe PR!"></textarea>
                 </div>
 
                 <button type="submit" id="submitBtn">Toevoegen</button>
@@ -348,7 +355,8 @@
                 name: document.getElementById('name').value,
                 date: document.getElementById('date').value,
                 duration: parseInt(document.getElementById('duration').value),
-                type: document.getElementById('type').value
+                type: document.getElementById('type').value,
+                notes: document.getElementById('notes').value || null
             };
 
             try {
@@ -397,6 +405,7 @@
                     document.getElementById('date').value = workout.date.split('T')[0];
                     document.getElementById('duration').value = workout.duration;
                     document.getElementById('type').value = workout.type;
+                    document.getElementById('notes').value = workout.notes || '';
 
                     document.getElementById('formTitle').textContent = 'Workout Bewerken';
                     document.getElementById('submitBtn').textContent = 'Bijwerken';

@@ -13,7 +13,9 @@ Een RESTful API voor het beheren van workouts en oefeningen, gebouwd met Node.js
 - [API Endpoints](#api-endpoints)
 - [Project Structuur](#project-structuur)
 - [Environment Variables](#environment-variables)
+- [Testing](#testing)
 - [Bronvermelding](#bronvermelding)
+- [Code Kwaliteit & Security](#code-kwaliteit--security)
 
 ## Overzicht
 
@@ -30,6 +32,8 @@ Deze API stelt gebruikers in staat om workouts en oefeningen te beheren. Je kunt
 - ✅ **HTML API documentatie** op root endpoint
 - ✅ **CORS** support
 - ✅ **Environment variables** voor configuratie
+- ✅ **Statistics Dashboard** met gedetailleerde trainingsstatistieken
+- ✅ **Notes/Comments** voor workouts en exercises
 
 ## Tech Stack
 
@@ -91,15 +95,23 @@ Importeer het bestand `database/schema.sql` in phpMyAdmin of via de command line
 mysql -u root -p workouts_db < database/schema.sql
 ```
 
-Dit creëert de volgende tabellen:
-- **workouts** - Workouts met naam, datum, duur en type
-- **exercises** - Oefeningen met workout_id, naam, muscle_group, sets, reps en weight
+### 3. Voer de migrations uit
 
-### 3. Verificeer de tabellen
+**BELANGRIJK:** Na het importeren van het schema, moet je de notes migration uitvoeren:
+
+```bash
+mysql -u root -p workouts_db < database/migrations_notes.sql
+```
+
+Dit voegt de `notes` kolommen toe aan de workouts en exercises tabellen.
+
+### 4. Tabellen overzicht
 
 De database bevat nu:
-- 2 tabellen met foreign key constraints
-- Indexes voor betere performance
+- **workouts** - Workouts met naam, datum, duur, type en notes
+- **exercises** - Oefeningen met workout_id, naam, muscle_group, sets, reps, weight en notes
+- Foreign key constraints met CASCADE DELETE
+- Indexes voor betere performance (date, type, workout_id, muscle_group)
 - Sample data voor testing
 
 ## Gebruik
@@ -152,6 +164,14 @@ Bezoek `http://localhost:3000` in je browser voor de volledige HTML API document
 | `POST` | `/api/exercises` | Maak nieuwe exercise aan |
 | `PUT` | `/api/exercises/:id` | Update exercise |
 | `DELETE` | `/api/exercises/:id` | Verwijder exercise |
+
+### Statistics
+
+| Method | Endpoint | Beschrijving |
+|--------|----------|--------------|
+| `GET` | `/api/statistics` | Haal alle statistieken op (workouts + exercises) |
+| `GET` | `/api/statistics/workouts` | Haal alleen workout statistieken op |
+| `GET` | `/api/statistics/exercises` | Haal alleen exercise statistieken op |
 
 ### Request/Response Voorbeelden
 
@@ -219,29 +239,33 @@ Bezoek `http://localhost:3000` in je browser voor de volledige HTML API document
 Project2/
 │
 ├── database/
-│   └── schema.sql              # Database schema en sample data
+│   ├── schema.sql               # Database schema en sample data
+│   └── migrations_notes.sql     # Migration voor notes kolommen
 │
 ├── public/
-│   └── index.html              # HTML API documentatie
+│   └── index.html               # HTML API documentatie
 │
 ├── src/
 │   ├── config/
-│   │   └── database.js         # Database connectie configuratie
+│   │   └── database.js              # Database connectie configuratie
 │   │
 │   ├── controllers/
-│   │   ├── workoutController.js   # Workout business logic
-│   │   └── exerciseController.js  # Exercise business logic
+│   │   ├── workoutController.js     # Workout business logic
+│   │   ├── exerciseController.js    # Exercise business logic
+│   │   └── statisticsController.js  # Statistics aggregation logic
 │   │
 │   ├── models/
-│   │   ├── Workout.js          # Workout database queries
-│   │   └── Exercise.js         # Exercise database queries
+│   │   ├── Workout.js               # Workout database queries
+│   │   ├── Exercise.js              # Exercise database queries
+│   │   └── Statistics.js            # Statistics queries
 │   │
 │   ├── routes/
-│   │   ├── workoutRoutes.js    # Workout API routes
-│   │   └── exerciseRoutes.js   # Exercise API routes
+│   │   ├── workoutRoutes.js         # Workout API routes
+│   │   ├── exerciseRoutes.js        # Exercise API routes
+│   │   └── statisticsRoutes.js      # Statistics API routes
 │   │
 │   └── middleware/
-│       └── validation.js       # Input validatie middleware
+│       └── validation.js            # Input validatie middleware
 │
 ├── .env                        # Environment variables (niet in git)
 ├── .env.example                # Environment variables template
@@ -261,6 +285,7 @@ Project2/
 | `DB_NAME` | Naam van de database | `workouts_db` |
 | `DB_PORT` | MySQL poort | `3306` |
 | `PORT` | Server poort | `3000` |
+| `NODE_ENV` | Environment mode (development/production) | `development` |
 
 ## Validatie
 
@@ -350,6 +375,55 @@ curl "http://localhost:3000/api/workouts?limit=5&offset=0"
 - [dotenv Documentation](https://www.npmjs.com/package/dotenv) - Environment variables
 - [Node.js Best Practices](https://github.com/goldbergyoni/nodebestpractices) - Code structuur
 - [RESTful API Design](https://restfulapi.net/) - API design principles
+
+## Code Kwaliteit & Security
+
+### Code Kwaliteit ✅
+
+Het project volgt goede coding practices:
+- **Gelaagde architectuur** - Controllers, Models, Routes, Middleware zijn gescheiden
+- **ES6 Modules** - Moderne import/export syntax
+- **Async/await** - Proper asynchrone code handling
+- **Error handling** - Try-catch blokken in alle controllers + global error handler
+- **Input validatie** - Dedicated validation middleware voor alle inputs
+- **SQL Injection bescherming** - Prepared statements overal gebruikt
+- **Connection pooling** - Efficiënt database connection management
+- **Graceful shutdown** - SIGTERM en SIGINT handlers voor clean shutdown
+
+### Database Design ✅
+
+- Foreign keys met CASCADE DELETE
+- Indexes op vaak gebruikte kolommen (date, type, workout_id, muscle_group)
+- ENUM types voor validation op database niveau
+- Timestamps voor auditing (created_at, updated_at)
+
+### Security Overwegingen ⚠️
+
+**Let op:** Deze API is bedoeld voor educatieve doeleinden. Voor productie gebruik zijn de volgende beveiligingsmaatregelen nodig:
+
+1. **Authenticatie & Autorisatie** - Momenteel ontbreekt gebruikersauthenticatie volledig
+2. **CORS configuratie** - CORS is volledig open, alle origins zijn toegestaan
+3. **Rate limiting** - Geen bescherming tegen brute force of DDoS aanvallen
+4. **Input sanitization** - Basis validatie aanwezig, maar kan uitgebreid worden
+5. **HTTPS** - Gebruik HTTPS in productie (niet in deze setup)
+6. **Error messages** - Error details worden naar client gestuurd in development mode
+7. **Environment secrets** - Zorg dat `.env` NOOIT in git staat (.gitignore is geconfigureerd)
+
+### Aanbevelingen voor Productie
+
+Voordat je deze API in productie gebruikt, overweeg het volgende toe te voegen:
+
+- **Authentication** - JWT tokens of session-based auth
+- **Authorization** - Role-based access control (RBAC)
+- **Rate limiting** - Express-rate-limit package
+- **Helmet.js** - Security headers
+- **HTTPS** - SSL/TLS certificaten
+- **Logging** - Winston of Bunyan voor structured logging
+- **Monitoring** - Health check endpoints
+- **Testing** - Unit tests, integration tests
+- **API versioning** - /api/v1/workouts voor backwards compatibility
+- **Request validation** - Joi of Yup voor uitgebreidere validatie
+- **CORS whitelist** - Specifieke origins toestaan
 
 ## Licentie
 

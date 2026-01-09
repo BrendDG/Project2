@@ -101,7 +101,7 @@ export const getExerciseById = async (req, res) => {
 // Maak nieuwe exercise aan
 export const createExercise = async (req, res) => {
   try {
-    const { workout_id, name, muscle_group, sets, reps, weight } = req.body;
+    const { workout_id, name, muscle_group, sets, reps, weight, notes } = req.body;
 
     // Validatie
     if (!workout_id || !name || !muscle_group || !sets || !reps) {
@@ -117,7 +117,8 @@ export const createExercise = async (req, res) => {
       muscle_group,
       sets,
       reps,
-      weight
+      weight,
+      notes
     });
 
     res.status(201).json({
@@ -137,7 +138,7 @@ export const createExercise = async (req, res) => {
 // Update exercise
 export const updateExercise = async (req, res) => {
   try {
-    const { workout_id, name, muscle_group, sets, reps, weight } = req.body;
+    const { workout_id, name, muscle_group, sets, reps, weight, notes } = req.body;
 
     // Validatie
     if (!workout_id || !name || !muscle_group || !sets || !reps) {
@@ -153,7 +154,8 @@ export const updateExercise = async (req, res) => {
       muscle_group,
       sets,
       reps,
-      weight
+      weight,
+      notes
     });
 
     if (!updated) {

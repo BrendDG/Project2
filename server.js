@@ -11,6 +11,7 @@ import cors from 'cors';
 import { testConnection } from './src/config/database.js';
 import workoutRoutes from './src/routes/workoutRoutes.js';
 import exerciseRoutes from './src/routes/exerciseRoutes.js';
+import statisticsRoutes from './src/routes/statisticsRoutes.js';
 
 // CONFIGURATIE
 
@@ -47,6 +48,10 @@ app.use('/api/workouts', workoutRoutes);
 
 // Exercise routes
 app.use('/api/exercises', exerciseRoutes);
+
+// Statistics routes
+app.use('/api/statistics', statisticsRoutes);
+
 
 // ERROR HANDLING
 
